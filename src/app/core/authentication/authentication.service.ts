@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 export interface Credentials {
-  // Customize received credentials here
   username: string;
   token: string;
 }
@@ -13,17 +14,16 @@ export interface LoginContext {
   remember?: boolean;
 }
 
-const credentialsKey = 'credentials';
+const credentialsKey = 'ems-credentials-key';
 
 /**
  * Provides a base for authentication workflow.
- * The Credentials interface as well as login/logout methods should be replaced with proper implementation.
  */
 @Injectable()
 export class AuthenticationService {
   private _credentials: Credentials | null;
 
-  constructor() {
+  constructor(private httpClient: HttpClient) {
     const savedCredentials = sessionStorage.getItem(credentialsKey) || localStorage.getItem(credentialsKey);
     if (savedCredentials) {
       this._credentials = JSON.parse(savedCredentials);
@@ -36,13 +36,12 @@ export class AuthenticationService {
    * @return {Observable<Credentials>} The user credentials.
    */
   login(context: LoginContext): Observable<Credentials> {
-    // Replace by proper authentication call
-    const data = {
-      username: context.username,
-      token: '123456'
-    };
-    this.setCredentials(data, context.remember);
-    return of(data);
+    return this.httpClient
+      .post<Credentials>('/user/auth', {
+        userName: context.username,
+        password: context.password
+      })
+      .pipe(tap(response => this.setCredentials(response, context.remember)));
   }
 
   /**

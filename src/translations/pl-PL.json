@@ -1,0 +1,16 @@
+{
+  "APP_NAME": "Employee Management System",
+  "About": "O aplikacji",
+  "Hello world !": "Witaj!",
+  "Home": "Home",
+  "Logged in as": "Zalogowany jako",
+  "Login": "Login",
+  "Logout": "Wyloguj",
+  "Password": "Hasło",
+  "Password is required": "Hasło jest wymagane",
+  "Username": "Nazwa użytkownika",
+  "Username is required": "Nazwa użytkownika jest wymagana",
+  "Username or password incorrect.": "Nazwa użytkownika lub hasło jest nieprawidłowe",
+  "Remember me": "Zapamiętaj mnie",
+  "Version": "Wersja"
+}

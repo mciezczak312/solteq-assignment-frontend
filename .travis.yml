@@ -1,7 +1,7 @@
 language: node_js
 node_js:
-  - "8.12.0"
-addons:
+  - '8.12.0'
+? addons
 apt:
   sources:
     - google-chrome
@@ -27,7 +27,7 @@ before_install:
   - sh -e /etc/init.d/xvfb start
 
 script:
-  - yarn test --watch=false 
+  - npm run test:ci
 
 after_success:
   - sudo docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
