@@ -1,0 +1,11 @@
+version: '3.5'
+
+services:
+
+  angular-service:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.Prod
+    container_name: solteq-assignment-front-container
+    ports:
+      - '80:80'
