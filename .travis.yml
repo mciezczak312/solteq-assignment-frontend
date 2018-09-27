@@ -31,5 +31,5 @@ script:
 
 after_success:
   - sudo docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
-  - sudo docker tag solteq-assignment-front:latest yokken3122/solteq-assignment-front/
-  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST = "false" ]; then sudo docker push yokken3122/solteq-assignment-front/; fi
+  - sudo docker tag solteq-assignment-front:latest yokken3122/solteq-assignment-front:latest
+  - if [ $TRAVIS_BRANCH == "master" ] && [ $TRAVIS_PULL_REQUEST = "false" ]; then sudo docker push yokken3122/solteq-assignment-front; fi

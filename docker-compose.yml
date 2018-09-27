@@ -7,5 +7,6 @@ services:
       context: .
       dockerfile: ./Dockerfile.Prod
     container_name: solteq-assignment-front-container
+    image: solteq-assignment-front
     ports:
       - '80:80'
