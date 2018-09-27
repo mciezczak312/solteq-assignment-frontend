@@ -1,11 +1,42 @@
 <div class="container-fluid">
   <div class="jumbotron text-center">
-    <h1>
-      <img class="logo" src="assets/ngx-rocket-logo.png" alt="angular logo"/>
-      <span translate>Hello worlld !</span>
-      <span>wita1</span>
+    <h1 translate>
+      Employee Management System Dashboard
     </h1>
+  </div>
+  <div class="full-width text-center">
     <app-loader [isLoading]="isLoading"></app-loader>
-    <q [hidden]="isLoading">{{quote}}</q>
+  </div>
+  <div [hidden]="isLoading" class="row">
+    <div class="col-lg-9 col-12">
+      <ngx-charts-bar-horizontal
+        [scheme]="colorScheme"
+        [results]="statsData.salaryIntervals"
+        [gradient]="false"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="false"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel">
+      </ngx-charts-bar-horizontal>
+    </div>
+    <div class="col-lg-3 col-12">
+      <div class="m-2">
+        <app-dashboard-block
+          [iconName]="'fa-dollar-sign'"
+          [mainText]="statsData.avgSalary"
+          [secondaryText]="'Average salary'">
+        </app-dashboard-block>
+      </div>
+      <div class="m-2">
+        <app-dashboard-block
+          [iconName]="'fa-users'"
+          [mainText]="statsData.employeesCount"
+          [secondaryText]="'No. of employees'">
+        </app-dashboard-block>
+      </div>
+    </div>
   </div>
 </div>

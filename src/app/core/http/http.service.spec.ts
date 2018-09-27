@@ -2,11 +2,12 @@ import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClient, HttpInterceptor } from '@angular/common/http';
 
-import { HttpService } from './http.service';
-import { HttpCacheService } from './http-cache.service';
-import { ErrorHandlerInterceptor } from './error-handler.interceptor';
-import { CacheInterceptor } from './cache.interceptor';
-import { ApiPrefixInterceptor } from './api-prefix.interceptor';
+import { HttpService } from '@app/core';
+import { HttpCacheService } from '@app/core';
+import { ErrorHandlerInterceptor } from '@app/core';
+import { CacheInterceptor } from '@app/core';
+import { ApiPrefixInterceptor } from '@app/core';
+import { JwtInterceptor } from '@app/core/http/jwt.interceptor';
 
 describe('HttpService', () => {
   let httpCacheService: HttpCacheService;
@@ -20,6 +21,7 @@ describe('HttpService', () => {
         ErrorHandlerInterceptor,
         CacheInterceptor,
         ApiPrefixInterceptor,
+        JwtInterceptor,
         HttpCacheService,
         {
           provide: HttpClient,
@@ -35,6 +37,27 @@ describe('HttpService', () => {
       http = _http;
       httpMock = _httpMock;
       httpCacheService = _httpCacheService;
+
+      let store = {};
+
+      spyOn(localStorage, 'getItem').and.callFake(
+        (key: string): String => {
+          return store[key] || null;
+        }
+      );
+      spyOn(localStorage, 'removeItem').and.callFake(
+        (key: string): void => {
+          delete store[key];
+        }
+      );
+      spyOn(localStorage, 'setItem').and.callFake(
+        (key: string, value: string): string => {
+          return (store[key] = <string>value);
+        }
+      );
+      spyOn(localStorage, 'clear').and.callFake(() => {
+        store = {};
+      });
     }
   ));
 
@@ -43,8 +66,9 @@ describe('HttpService', () => {
     httpMock.verify();
   });
 
-  it('should use error handler, API prefix and no cache by default', () => {
+  it('should use error handler, API prefix, JWT, no cache by default', () => {
     // Arrange
+
     let interceptors: HttpInterceptor[];
     const realRequest = http.request;
     spyOn(HttpService.prototype, 'request').and.callFake(function(this: any) {
@@ -60,6 +84,7 @@ describe('HttpService', () => {
       expect(http.request).toHaveBeenCalled();
       expect(interceptors.some(i => i instanceof ApiPrefixInterceptor)).toBeTruthy();
       expect(interceptors.some(i => i instanceof ErrorHandlerInterceptor)).toBeTruthy();
+      expect(interceptors.some(i => i instanceof JwtInterceptor)).toBeTruthy();
       expect(interceptors.some(i => i instanceof CacheInterceptor)).toBeFalsy();
     });
     httpMock.expectOne({}).flush({});
@@ -81,6 +106,7 @@ describe('HttpService', () => {
     request.subscribe(() => {
       expect(interceptors.some(i => i instanceof ApiPrefixInterceptor)).toBeTruthy();
       expect(interceptors.some(i => i instanceof ErrorHandlerInterceptor)).toBeTruthy();
+      expect(interceptors.some(i => i instanceof JwtInterceptor)).toBeTruthy();
       expect(interceptors.some(i => i instanceof CacheInterceptor)).toBeTruthy();
     });
     httpMock.expectOne({}).flush({});
@@ -102,6 +128,7 @@ describe('HttpService', () => {
     request.subscribe(() => {
       expect(interceptors.some(i => i instanceof ApiPrefixInterceptor)).toBeTruthy();
       expect(interceptors.some(i => i instanceof ErrorHandlerInterceptor)).toBeFalsy();
+      expect(interceptors.some(i => i instanceof JwtInterceptor)).toBeTruthy();
       expect(interceptors.some(i => i instanceof CacheInterceptor)).toBeFalsy();
     });
     httpMock.expectOne({}).flush({});
@@ -123,6 +150,7 @@ describe('HttpService', () => {
     request.subscribe(() => {
       expect(interceptors.some(i => i instanceof ApiPrefixInterceptor)).toBeFalsy();
       expect(interceptors.some(i => i instanceof ErrorHandlerInterceptor)).toBeTruthy();
+      expect(interceptors.some(i => i instanceof JwtInterceptor)).toBeTruthy();
       expect(interceptors.some(i => i instanceof CacheInterceptor)).toBeFalsy();
     });
     httpMock.expectOne({}).flush({});

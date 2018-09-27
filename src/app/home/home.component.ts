@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { finalize } from 'rxjs/operators';
-
-import { QuoteService } from './quote.service';
+import { ActivatedRoute } from '@angular/router';
+import { EmployeesStatisticsModel } from '@app/home/models/employees-statistics.model';
 
 @Component({
   selector: 'app-home',
@@ -9,22 +8,23 @@ import { QuoteService } from './quote.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  quote: string;
   isLoading: boolean;
+  statsData: EmployeesStatisticsModel;
 
-  constructor(private quoteService: QuoteService) {}
+  showXAxis = true;
+  showYAxis = true;
+  showXAxisLabel = true;
+  xAxisLabel = 'No. of employees'; // TODO translation
+  showYAxisLabel = true;
+  yAxisLabel = 'Salary'; // TODO translation
 
-  ngOnInit() {
-    this.isLoading = true;
-    this.quoteService
-      .getRandomQuote({ category: 'dev' })
-      .pipe(
-        finalize(() => {
-          this.isLoading = false;
-        })
-      )
-      .subscribe((quote: string) => {
-        this.quote = quote;
-      });
+  colorScheme = {
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+  };
+
+  constructor(private route: ActivatedRoute) {
+    this.statsData = <EmployeesStatisticsModel>this.route.snapshot.data.stats;
   }
+
+  ngOnInit() {}
 }

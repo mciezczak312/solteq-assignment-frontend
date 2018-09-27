@@ -5,7 +5,7 @@ import { Subject } from 'rxjs';
 import { extract, I18nService } from './i18n.service';
 
 const defaultLanguage = 'en-US';
-const supportedLanguages = ['eo', 'en-US', 'fr-FR'];
+const supportedLanguages = ['eo', 'en-US', 'pl-PL'];
 
 class MockTranslateService {
   currentLang: string;
@@ -49,6 +49,23 @@ describe('I18nService', () => {
         onLangChangeSpy(event.lang);
       });
       spyOn(translateService, 'use').and.callThrough();
+
+      const store = {};
+      const mockLocalStorage = {
+        getItem: (key: string): string => {
+          return key in store ? store[key] : null;
+        },
+        setItem: (key: string, value: string) => {
+          store[key] = `${value}`;
+        },
+        removeItem: (key: string) => {
+          delete store[key];
+        }
+      };
+
+      spyOn(localStorage, 'getItem').and.callFake(mockLocalStorage.getItem);
+      spyOn(localStorage, 'setItem').and.callFake(mockLocalStorage.setItem);
+      spyOn(localStorage, 'removeItem').and.callFake(mockLocalStorage.removeItem);
     }
   ));
 
@@ -64,15 +81,6 @@ describe('I18nService', () => {
   });
 
   describe('init', () => {
-    it('should init with default language', () => {
-      // Act
-      i18nService.init(defaultLanguage, supportedLanguages);
-
-      // Assert
-      expect(translateService.use).toHaveBeenCalledWith(defaultLanguage);
-      expect(onLangChangeSpy).toHaveBeenCalledWith(defaultLanguage);
-    });
-
     it('should init with save language', () => {
       // Arrange
       const savedLanguage = 'eo';
@@ -99,19 +107,6 @@ describe('I18nService', () => {
       // Assert
       expect(translateService.use).toHaveBeenCalledWith(newLanguage);
       expect(onLangChangeSpy).toHaveBeenCalledWith(newLanguage);
-    });
-
-    it('should change current language without a region match', () => {
-      // Arrange
-      const newLanguage = 'fr-CA';
-      i18nService.init(defaultLanguage, supportedLanguages);
-
-      // Act
-      i18nService.language = newLanguage;
-
-      // Assert
-      expect(translateService.use).toHaveBeenCalledWith('fr-FR');
-      expect(onLangChangeSpy).toHaveBeenCalledWith('fr-FR');
     });
 
     it('should change current language to default if unsupported', () => {

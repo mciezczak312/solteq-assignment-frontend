@@ -1,14 +1,17 @@
 import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 
 import { AuthenticationService, Credentials } from './authentication.service';
+import { HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-const credentialsKey = 'credentials';
+const credentialsKey = 'ems-credentials-key';
 
 describe('AuthenticationService', () => {
   let authenticationService: AuthenticationService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       providers: [AuthenticationService]
     });
   });
@@ -24,40 +27,56 @@ describe('AuthenticationService', () => {
   });
 
   describe('login', () => {
-    it('should return credentials', fakeAsync(() => {
-      // Act
-      const request = authenticationService.login({
-        username: 'toto',
-        password: '123'
-      });
-      tick();
+    it(`should return credentials`, fakeAsync(
+      inject([HttpClient, HttpTestingController], (http: HttpClient, backend: HttpTestingController) => {
+        const request = authenticationService.login({
+          username: 'toto',
+          password: '123'
+        });
+        tick();
 
-      // Assert
-      request.subscribe(credentials => {
-        expect(credentials).toBeDefined();
-        expect(credentials.token).toBeDefined();
-      });
-    }));
+        request.subscribe(credentials => {
+          expect(credentials).toBeDefined();
+          expect(credentials.token).toBeDefined();
+        });
 
-    it('should authenticate user', fakeAsync(() => {
-      expect(authenticationService.isAuthenticated()).toBe(false);
+        backend
+          .match({
+            url: '/user/auth',
+            method: 'POST'
+          })[0]
+          .flush({ token: '123', username: 'toto' });
+      })
+    ));
 
-      // Act
-      const request = authenticationService.login({
-        username: 'toto',
-        password: '123'
-      });
-      tick();
+    it('should authenticate user', fakeAsync(
+      inject([HttpClient, HttpTestingController], (http: HttpClient, backend: HttpTestingController) => {
+        expect(authenticationService.isAuthenticated()).toBe(false);
 
-      // Assert
-      request.subscribe(() => {
-        expect(authenticationService.isAuthenticated()).toBe(true);
-        expect(authenticationService.credentials).toBeDefined();
-        expect(authenticationService.credentials).not.toBeNull();
-        expect((<Credentials>authenticationService.credentials).token).toBeDefined();
-        expect((<Credentials>authenticationService.credentials).token).not.toBeNull();
-      });
-    }));
+        // Act
+        const request = authenticationService.login({
+          username: 'toto',
+          password: '123'
+        });
+        tick();
+
+        // Assert
+        request.subscribe(() => {
+          expect(authenticationService.isAuthenticated()).toBe(true);
+          expect(authenticationService.credentials).toBeDefined();
+          expect(authenticationService.credentials).not.toBeNull();
+          expect((<Credentials>authenticationService.credentials).token).toBeDefined();
+          expect((<Credentials>authenticationService.credentials).token).not.toBeNull();
+        });
+
+        backend
+          .match({
+            url: '/user/auth',
+            method: 'POST'
+          })[0]
+          .flush({ token: '123', username: 'toto' });
+      })
+    ));
 
     it('should persist credentials for the session', fakeAsync(() => {
       // Act
