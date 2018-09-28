@@ -21,17 +21,8 @@ export class EmployeeFormComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       gender: '',
       positionsNamesIds: [[]],
-      address: this.formBuilder.group({
-        street: ['', Validators.required],
-        zipCode: ['', Validators.required],
-        country: [''],
-        city: ['', Validators.required]
-      }),
-      salary: this.formBuilder.group({
-        amount: [null, [Validators.min(0.0), Validators.required]],
-        fromDate: ['', Validators.required],
-        toDate: ['', Validators.required]
-      })
+      address: this.buildAddressForm(),
+      salary: this.buildSalaryForm()
     });
 
     this.positions = [
@@ -48,5 +39,22 @@ export class EmployeeFormComponent implements OnInit {
 
   get salaryGroup(): any {
     return this.employeeForm.controls.salary;
+  }
+
+  private buildAddressForm(): FormGroup {
+    return this.formBuilder.group({
+      street: ['', Validators.required],
+      zipCode: ['', Validators.required],
+      country: [''],
+      city: ['', Validators.required]
+    });
+  }
+
+  private buildSalaryForm(): FormGroup {
+    return this.formBuilder.group({
+      amount: [null, [Validators.min(0.0), Validators.required]],
+      fromDate: ['', Validators.required],
+      toDate: ['', Validators.required]
+    });
   }
 }
