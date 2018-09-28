@@ -1,0 +1,191 @@
+<div class="container">
+  <div class="card col-md-12 mx-auto">
+    <div class="card-body">
+
+      <h4 class="card-title text-center">
+        Employee form
+      </h4>
+
+
+      <form [formGroup]="employeeForm" novalidate>
+        <h5>Personal details</h5>
+        <hr/>
+        <div class="form-container">
+          <div class="form-group row">
+            <label for="first-name" class="col-md-3 col-form-label no-padding-lr"><span
+              translate>First name</span></label>
+
+            <input id="first-name" type="text" class="col-md-9 form-control" formControlName="firstName"
+                   [placeholder]="'First name' | translate"/>
+
+            <small [hidden]="employeeForm.controls.firstName.valid || employeeForm.controls.firstName.untouched"
+                   class="col-md-9 offset-md-3 text-danger" translate>
+              First name is required
+            </small>
+          </div>
+
+          <div class="form-group row">
+            <label for="last-name" class="col-md-3 col-form-label no-padding-lr"><span translate>Last name</span></label>
+
+            <input id="last-name" type="text" class="col-md-9 form-control" formControlName="lastName"
+                   [placeholder]="'Last name' | translate"/>
+
+            <small [hidden]="employeeForm.controls.lastName.valid || employeeForm.controls.lastName.untouched"
+                   class="col-md-9 offset-md-3 text-danger" translate>
+              Last name is required
+            </small>
+          </div>
+
+          <div class="form-group row">
+            <label for="email" class="col-md-3 col-form-label no-padding-lr"><span translate>Email</span></label>
+
+            <input id="email" type="text" class="col-md-9 form-control" formControlName="email"
+                   [placeholder]="'Email' | translate"/>
+
+            <small [hidden]="employeeForm.controls.email.valid || employeeForm.controls.email.untouched"
+                   class="col-md-9 offset-md-3 text-danger" translate>
+              <span [hidden]="!employeeForm.controls.email.errors?.required" translate>Email is required</span>
+              <span [hidden]="!employeeForm.controls.email.errors?.email" translate>Email is invalid</span>
+            </small>
+          </div>
+
+          <div class="form-group row">
+            <label for="gender" class="col-md-3 col-form-label no-padding-lr"><span translate>Gender</span></label>
+            <select class="form-control col-md-9" id="gender" formControlName="gender">
+              <option>MALE</option>
+              <option>FEMALE</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="form-group row">
+            <label for="positions-names" class="col-md-3 col-form-label no-padding-lr"><span
+              translate>Positions</span></label>
+            <ng-select id="positions-names"
+                       class="col-md-9 no-padding-lr"
+                       [items]="positions"
+                       bindLabel="name"
+                       bindValue="id"
+                       [multiple]="true"
+                       [placeholder]="'Select positions' | translate"
+                       [clearAllText]="'Clear' | translate"
+                       formControlName="positionsNamesIds">
+            </ng-select>
+          </div>
+        </div>
+
+        <h5>Address details</h5>
+        <hr/>
+
+
+        <div class="form-container">
+          <div [formGroup]="addressGroup">
+
+            <div class="form-group row">
+              <label for="street" class="col-md-3 col-form-label no-padding-lr"><span
+                translate>Street address</span></label>
+
+              <input id="street" type="text" class="col-md-9 form-control" formControlName="street"
+                     [placeholder]="'Street' | translate"/>
+
+              <small [hidden]="addressGroup.controls.street.valid || addressGroup.controls.street.untouched"
+                     class="col-md-9 offset-md-3 text-danger" translate>
+                Street is required
+              </small>
+            </div>
+
+            <div class="form-group row">
+              <label for="city" class="col-md-3 col-form-label no-padding-lr"><span translate>City</span></label>
+
+              <input id="city" type="text" class="col-md-6 form-control" formControlName="city"
+                     [placeholder]="'City' | translate"/>
+
+              <input type="text" class="col-md-2 offset-md-1 form-control margin-sm-top-5" formControlName="zipCode"
+                     [placeholder]="'Zip-code' | translate"/>
+
+              <small [hidden]="addressGroup.controls.city.valid || addressGroup.controls.city.untouched"
+                     class="col-md-6 offset-md-3 text-danger" translate>
+                City is required
+              </small>
+
+              <small [hidden]="addressGroup.controls.zipCode.valid || addressGroup.controls.zipCode.untouched"
+                     class="col-md-2 offset-md-10 text-danger" translate>
+                Zip code is required
+              </small>
+            </div>
+
+            <div class="form-group row">
+              <label for="country" class="col-md-3 col-form-label no-padding-lr"><span translate>Country</span></label>
+
+              <input id="country" type="text" class="col-md-9 form-control" formControlName="country"
+                     [placeholder]="'Country' | translate"/>
+            </div>
+
+          </div>
+        </div>
+
+        <h5>Salary details</h5>
+        <hr/>
+
+        <div class="form-container">
+          <div [formGroup]="salaryGroup">
+            <div class="form-group row">
+              <label for="amount" class="col-md-3 col-form-label no-padding-lr"><span
+                translate>Salary amount</span></label>
+
+              <input id="amount" type="number" class="col-md-9 form-control" formControlName="amount"
+                     [placeholder]="'Salary' | translate"/>
+
+              <small [hidden]="salaryGroup.controls.amount.valid || salaryGroup.controls.amount.untouched"
+                     class="col-md-9 offset-md-3 text-danger" translate>
+                <span [hidden]="!salaryGroup.controls.amount.errors?.required" translate>Salary is required</span>
+                <span [hidden]="!salaryGroup.controls.amount.errors?.min" translate>Salary has to be greater than 0</span>
+
+              </small>
+
+
+            </div>
+
+            <div class="form-group row">
+              <label for="amount" class="col-md-3 col-form-label no-padding-lr">
+                <span translate>Starting date</span>
+              </label>
+
+              <div class="input-group col-md-9 no-padding-lr">
+                <input class="form-control"
+                       placeholder="yyyy-mm-dd"
+                       name="dp" formControlName="fromDate" ngbDatepicker #d="ngbDatepicker"/>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                    <i class="fas fa-calendar-alt"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="amount" class="col-md-3 col-form-label no-padding-lr">
+                <span translate>Ending date</span>
+              </label>
+
+              <div class="input-group col-md-9 no-padding-lr">
+                <input class="form-control"
+                       placeholder="yyyy-mm-dd"
+                       name="dp2" formControlName="toDate" ngbDatepicker #dp2="ngbDatepicker"/>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" (click)="dp2.toggle()" type="button">
+                    <i class="fas fa-calendar-alt"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </form>
+
+
+    </div>
+  </div>
+</div>

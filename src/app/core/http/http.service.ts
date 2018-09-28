@@ -1,11 +1,7 @@
 import { Inject, Injectable, InjectionToken, Injector, Optional } from '@angular/core';
 import { HttpClient, HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-import { ErrorHandlerInterceptor } from '@app/core';
-import { CacheInterceptor } from '@app/core';
-import { ApiPrefixInterceptor } from '@app/core';
-import { JwtInterceptor } from '@app/core';
+import { ApiPrefixInterceptor, CacheInterceptor, ErrorHandlerInterceptor, JwtInterceptor } from '@app/core';
 
 // HttpClient is declared in a re-exported module, so we have to extend the original module to make it work properly
 // (see https://github.com/Microsoft/TypeScript/issues/13897)
@@ -69,9 +65,9 @@ export class HttpService extends HttpClient {
 
     if (!this.interceptors) {
       this.interceptors = [
-        this.injector.get(JwtInterceptor),
         this.injector.get(ApiPrefixInterceptor),
-        this.injector.get(ErrorHandlerInterceptor)
+        this.injector.get(ErrorHandlerInterceptor),
+        this.injector.get(JwtInterceptor)
       ];
     }
   }
@@ -107,6 +103,7 @@ export class HttpService extends HttpClient {
   }
 
   private addInterceptor(interceptor: HttpInterceptor): HttpService {
-    return new HttpService(this.httpHandler, this.injector, this.interceptors.concat([interceptor]));
+    this.interceptors = [interceptor, ...this.interceptors];
+    return new HttpService(this.httpHandler, this.injector, this.interceptors);
   }
 }

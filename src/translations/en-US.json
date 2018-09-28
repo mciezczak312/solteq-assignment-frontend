@@ -9,6 +9,17 @@
   "Password": "Password",
   "Password is required": "Password is required",
   "Username": "Username",
+
+  "First name": "First name",
+  "Last name": "Last name",
+  "Email": "Email",
+  "Email is required": "Email is required",
+  "Email is invalid": "Email is invalid",
+  "Gender": "Gender",
+  "Dashboard": "Dashboard",
+  "Employee list": "Employee list",
+  "Add employee": "Add employee",
+
   "Username is required": "Username is required",
   "Username or password incorrect.": "Username or password incorrect.",
   "Remember me": "Remember me",

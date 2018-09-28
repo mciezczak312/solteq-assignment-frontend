@@ -9,6 +9,17 @@
   "Password": "Hasło",
   "Password is required": "Hasło jest wymagane",
   "Username": "Nazwa użytkownika",
+
+  "First name": "Imię",
+  "Last name": "Nazwisko",
+  "Email": "Email",
+  "Email is required": "Email jest wymagany",
+  "Email is invalid": "Email jest nieprawidłowy",
+  "Gender": "Płeć",
+  "Dashboard": "Pulpit",
+  "Employee list": "Lista pracowników",
+  "Add employee": "Dodaj pracownika",
+
   "Username is required": "Nazwa użytkownika jest wymagana",
   "Username or password incorrect.": "Nazwa użytkownika lub hasło jest nieprawidłowe",
   "Remember me": "Zapamiętaj mnie",
