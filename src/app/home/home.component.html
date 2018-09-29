@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid mb-5">
   <div class="jumbotron text-center">
     <h1 translate>
       Employee Management System Dashboard
@@ -7,33 +7,47 @@
   <div class="full-width text-center">
     <app-loader [isLoading]="isLoading"></app-loader>
   </div>
-  <div [hidden]="isLoading" class="row">
-    <div class="col-lg-9 col-12">
-      <ngx-charts-bar-horizontal
-        [scheme]="colorScheme"
-        [results]="statsData.salaryIntervals"
-        [gradient]="false"
-        [xAxis]="showXAxis"
-        [yAxis]="showYAxis"
-        [legend]="false"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel">
-      </ngx-charts-bar-horizontal>
+  <div class="row ml-0">
+    <div class="card col-md-9 no-padding-lr">
+      <div class="card-header">
+
+        <div class="btn-group btn-group-toggle" data-toggle="buttons" *ngFor="let x of availableYears">
+          <label class="btn btn-secondary" [ngClass]="{'active': currentGraphYear === x}">
+            <input type="radio" (click)="onChangeGraph(x)" name="options" id="option2" autocomplete="off" checked /> {{x}}
+          </label>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <ngx-charts-line-chart
+          [scheme]="colorScheme"
+          [results]="statsDataGraphFormatted"
+          [gradient]="gradient"
+          [xAxis]="showXAxis"
+          [yAxis]="showYAxis"
+          [legend]="showLegend"
+          [showXAxisLabel]="showXAxisLabel"
+          [showYAxisLabel]="showYAxisLabel"
+          [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel"
+          autoScale="true">
+        </ngx-charts-line-chart>
+      </div>
     </div>
-    <div class="col-lg-3 col-12">
-      <div class="m-2">
+
+
+    <div *ngIf="employeesStats" class="col-md-3 col-12">
+      <div class="ml-2">
         <app-dashboard-block
           [iconName]="'fa-dollar-sign'"
-          [mainText]="statsData.avgSalary"
+          [mainText]="employeesStats?.averageCurrentSalary"
           [secondaryText]="'Average salary'">
         </app-dashboard-block>
       </div>
-      <div class="m-2">
+      <div class="ml-2 mt-2">
         <app-dashboard-block
           [iconName]="'fa-users'"
-          [mainText]="statsData.employeesCount"
+          [mainText]="employeesStats?.employeesCount"
           [secondaryText]="'No. of employees'">
         </app-dashboard-block>
       </div>
