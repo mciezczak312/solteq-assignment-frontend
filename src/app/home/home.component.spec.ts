@@ -15,23 +15,14 @@ describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
   const resolverDataStub = {
-    salaryIntervals: [
+    timeStamp: '2018-09-29T15:16:22.3115741+03:00',
+    data: [
       {
-        name: '10 000€ - 28 000€',
-        value: 32
-      },
-      {
-        name: '28 001€ - 46 000€',
-        value: 18
-      },
-      {
-        name: '46 001€ - 64 000€',
-        value: 9
+        amount: 4142.0949,
+        monthName: 'January',
+        year: 2017
       }
-    ],
-    avgSalary: 3643.51,
-    employeesCount: 100,
-    timeStamp: '2019-01-01 12-23'
+    ]
   };
 
   beforeEach(async(() => {

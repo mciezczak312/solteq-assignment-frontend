@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EmployeesListComponent } from './employees-list.component';
+import { NgbModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
 
 describe('EmployeesListComponent', () => {
   let component: EmployeesListComponent;
@@ -8,6 +10,7 @@ describe('EmployeesListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [NgbModule, FormsModule],
       declarations: [EmployeesListComponent]
     }).compileComponents();
   }));

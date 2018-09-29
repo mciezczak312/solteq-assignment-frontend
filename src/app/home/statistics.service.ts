@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { EmployeesStatisticsModel } from '@app/home/models/employees-statistics.model';
+import { AverageMonthsSalaryStatistics, EmployeesStatistics } from '@app/home/models/statistics-models';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,11 @@ import { EmployeesStatisticsModel } from '@app/home/models/employees-statistics.
 export class StatisticsService {
   constructor(private httpClient: HttpClient) {}
 
-  getEmployeesStatistics(): Observable<EmployeesStatisticsModel> {
-    return this.httpClient.cache().get<EmployeesStatisticsModel>('/stats/employees');
+  getAverageMonthsSalaryStatistics(): Observable<AverageMonthsSalaryStatistics> {
+    return this.httpClient.cache().get<AverageMonthsSalaryStatistics>('/stats/avgSalary');
+  }
+
+  getEmployeesStatistics(): Observable<EmployeesStatistics> {
+    return this.httpClient.cache().get<EmployeesStatistics>('/stats/employees');
   }
 }

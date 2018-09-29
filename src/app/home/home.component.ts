@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EmployeesStatisticsModel } from '@app/home/models/employees-statistics.model';
+import { AverageMonthsSalaryStatistics, EmployeesStatistics } from '@app/home/models/statistics-models';
+import { StatisticsService } from '@app/home/statistics.service';
 
 @Component({
   selector: 'app-home',
@@ -9,22 +10,68 @@ import { EmployeesStatisticsModel } from '@app/home/models/employees-statistics.
 })
 export class HomeComponent implements OnInit {
   isLoading: boolean;
-  statsData: EmployeesStatisticsModel;
+  statsDataGraphRaw: AverageMonthsSalaryStatistics;
+  statsDataGraphFormatted: any[];
+  employeesStats: EmployeesStatistics;
 
+  currentGraphYear: number;
+  availableYears: number[] = [2017, 2018];
+
+  // options
   showXAxis = true;
   showYAxis = true;
+  gradient = false;
+  showLegend = true;
   showXAxisLabel = true;
-  xAxisLabel = 'No. of employees'; // TODO translation
+  xAxisLabel = 'Month';
   showYAxisLabel = true;
-  yAxisLabel = 'Salary'; // TODO translation
+  yAxisLabel = 'Average salary';
 
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   };
 
-  constructor(private route: ActivatedRoute) {
-    this.statsData = <EmployeesStatisticsModel>this.route.snapshot.data.stats;
+  constructor(private route: ActivatedRoute, private statsService: StatisticsService) {
+    this.statsDataGraphRaw = <AverageMonthsSalaryStatistics>this.route.snapshot.data.stats;
+    this.statsService.getEmployeesStatistics().subscribe(data => {
+      this.employeesStats = data;
+    });
+    const objs: any[] = [];
+
+    this.statsDataGraphRaw.data.filter(x => x.year === 2018).forEach(x => {
+      objs.push({
+        name: x.monthName,
+        value: x.amount
+      });
+    });
+    this.statsDataGraphFormatted = [
+      {
+        name: 'Average salary',
+        series: objs
+      }
+    ];
+    this.currentGraphYear = 2018;
   }
 
   ngOnInit() {}
+
+  onChangeGraph(year: any) {
+    if (year === this.currentGraphYear) {
+      return;
+    }
+    const objs: any[] = [];
+    this.statsDataGraphRaw.data.filter(x => x.year === year).forEach(x => {
+      objs.push({
+        name: x.monthName,
+        value: x.amount
+      });
+    });
+    this.statsDataGraphFormatted = [
+      {
+        name: 'Average salary',
+        series: objs
+      }
+    ];
+    this.currentGraphYear = year;
+  }
 }
