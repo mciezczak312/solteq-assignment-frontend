@@ -24,18 +24,10 @@ export class EmployeesListComponent implements OnInit {
       tap(() => (this.searching = true)),
       switchMap(term =>
         this.searchService.search(term).pipe(
-          tap(() => {
-            this.searchFailed = false;
-          }),
+          tap(() => (this.searchFailed = false)),
           map(result => {
             this.searchResults = result;
-            const options: string[] = [];
-            result.forEach(x => {
-              options.push(x.firstName);
-              options.push(x.lastName);
-              options.push(x.email);
-            });
-            return options;
+            return this.composeOptions(result);
           }),
           catchError(() => {
             this.searchFailed = true;
@@ -43,9 +35,7 @@ export class EmployeesListComponent implements OnInit {
           })
         )
       ),
-      tap(res => {
-        this.searching = false;
-      })
+      tap(() => (this.searching = false))
     );
 
   ngOnInit() {}
@@ -53,5 +43,14 @@ export class EmployeesListComponent implements OnInit {
   itemSelected(event: NgbTypeaheadSelectItemEvent) {
     console.log(event);
     console.log(this.searchResults);
+  }
+
+  composeOptions(result: any) {
+    const options: string[] = [];
+    result.forEach((x: any) => {
+      options.push(x.firstName);
+      options.push(x.lastName);
+      options.push(x.email);
+    });
   }
 }
