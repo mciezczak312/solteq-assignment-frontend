@@ -323,6 +323,12 @@
   dependencies:
     tslib "^1.9.0"
 
+"@ng-select/ng-select@^2.9.1":
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/@ng-select/ng-select/-/ng-select-2.9.1.tgz#091e21bcd8f55134ba719168f2bca1465c4fbb0d"
+  dependencies:
+    tslib "^1.9.0"
+
 "@ngtools/webpack@6.2.3":
   version "6.2.3"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-6.2.3.tgz#88313131079d14f6c7e07940e807bb445db6a0aa"

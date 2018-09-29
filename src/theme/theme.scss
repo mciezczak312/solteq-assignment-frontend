@@ -3,6 +3,12 @@
  * Framework overrides and customization goes here.
  */
 
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
 .p-30 {
   padding: 30px;
+}
+
+.ng-invalid.ng-touched:not(form, div) {
+  border-left: 4px solid theme-color("danger");
 }
