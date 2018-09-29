@@ -36,7 +36,7 @@ export class EmployeesListComponent implements OnInit {
         )
       ),
       tap(() => (this.searching = false))
-    );
+    )
 
   ngOnInit() {}
 
@@ -52,5 +52,6 @@ export class EmployeesListComponent implements OnInit {
       options.push(x.lastName);
       options.push(x.email);
     });
+    return options;
   }
 }
