@@ -9,7 +9,32 @@
            [(ngModel)]="model"
            [ngbTypeahead]="search"
            placeholder="Search by first name / last name / email" />
-    <span *ngIf="searching">searching...</span>
-    <div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>
   </div>
+
+  <div class="row mr-0 justify-content-end mb-2">
+    <button type="button" (click)="onEdit()" [disabled]="selectedRow.length === 0" class="btn btn-primary">Edit</button>
+    <button type="button" (click)="onDelete()" [disabled]="selectedRow.length === 0" class="btn btn-danger ml-2">Delete</button>
+    <a *ngIf="rows" csvLink [data]="rows"><button type="button" class="btn btn-dark ml-2">Export to CSV</button></a>
+  </div>
+
+  <ngx-datatable
+    class="material"
+    [rows]="rows"
+    [columns]="[{name:'First name'},{name:'Last name'},{name:'Email'},{name:'Current Salary'},{name:'Positions names'}]"
+    [columnMode]="'force'"
+    [headerHeight]="50"
+    [footerHeight]="50"
+    [selected]="selectedRow"
+    [selectionType]="'single'"
+    (select)="onRowSelect($event)"
+    [rowHeight]="'auto'"
+    [externalPaging]="true"
+    [loadingIndicator]="loading"
+    [count]="page?.totalElements"
+    [offset]="page?.pageNumber"
+    [limit]="page?.pageSize"
+    [sorts]="[{prop: 'firstName', dir: 'asc'}]"
+    (page)="setPage($event)">
+  </ngx-datatable>
+
 </div>
