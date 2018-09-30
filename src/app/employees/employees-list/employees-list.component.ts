@@ -101,19 +101,14 @@ export class EmployeesListComponent implements OnInit {
 
 
   private composeOptions(result: EmployeeSearchResultModel[], searchTerm: string) {
-    const options: string[] = [];
+    let options: string[] = [];
     result.forEach((x: EmployeeSearchResultModel) => {
-      const termUpper = searchTerm.toLocaleUpperCase();
-      if (x.firstName.toLocaleUpperCase().indexOf(termUpper) !== -1) {
-        options.push(x.firstName);
-      }
-      if (x.lastName.toLocaleUpperCase().indexOf(termUpper) !== -1) {
-        options.push(x.lastName);
-      }
-      if (x.email.toLocaleUpperCase().indexOf(termUpper) !== -1) {
-        options.push(x.email);
-      }
+      options.push(x.firstName);
+      options.push(x.lastName);
+      options.push(x.email);
     });
+    const termUpper = searchTerm.toLocaleUpperCase();
+    options = options.filter(x => x.toLocaleUpperCase().indexOf(termUpper) !== -1);
     return options;
   }
 }

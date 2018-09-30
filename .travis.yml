@@ -30,7 +30,6 @@ before_install:
 
 script:
   - npm run test:ci
-  - codeclimate-test-reporter < reports/coverage/lcov/lcov.info
 
 after_success:
   - sudo docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
