@@ -1,0 +1,5 @@
+@import "src/theme/theme-variables";
+
+:host /deep/ .datatable-body-row.active .datatable-row-group {
+  background-color: $gray-500 !important; /* stylelint-disable-line declaration-no-important */
+}

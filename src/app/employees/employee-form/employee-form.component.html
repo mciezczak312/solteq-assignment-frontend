@@ -100,7 +100,7 @@
               <input id="city" type="text" class="col-md-6 form-control" formControlName="city"
                      [placeholder]="'City' | translate"/>
 
-              <input type="text" class="col-md-2 offset-md-1 form-control margin-sm-top-5" formControlName="zipCode"
+              <input type="text" class="col-md-2 offset-md-1 form-control margin-sm-top-5" formControlName="zip"
                      [placeholder]="'Zip-code' | translate"/>
 
               <small [hidden]="addressGroup.controls.city.valid || addressGroup.controls.city.untouched"
@@ -108,7 +108,7 @@
                 City is required
               </small>
 
-              <small [hidden]="addressGroup.controls.zipCode.valid || addressGroup.controls.zipCode.untouched"
+              <small [hidden]="addressGroup.controls.zip.valid || addressGroup.controls.zip.untouched"
                      class="col-md-2 offset-md-10 text-danger" translate>
                 Zip code is required
               </small>

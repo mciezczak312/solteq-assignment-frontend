@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateAdapter, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { EmployeesService } from '@app/employees/employees.service';
-import {Position} from '@app/employees/models/position';
+import { Position } from '@app/employees/models/position';
+import { ActivatedRoute, Router } from '@angular/router';
+import { EmployeeDto } from '@app/employees/models/employee-dto.model';
 
 @Component({
   selector: 'app-employee-form',
@@ -13,10 +15,12 @@ import {Position} from '@app/employees/models/position';
 export class EmployeeFormComponent implements OnInit {
   employeeForm: FormGroup;
   positions: Position[];
+  employeeId: number;
 
   constructor(
     private formBuilder: FormBuilder,
-    public employeeService: EmployeesService
+    public employeeService: EmployeesService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -29,8 +33,13 @@ export class EmployeeFormComponent implements OnInit {
       address: this.buildAddressForm(),
       salary: this.buildSalaryForm()
     });
-    this.employeeService.getPositionsDictionary().subscribe(x => this.positions = x);
-
+    this.employeeService.getPositionsDictionary().subscribe(x => (this.positions = x));
+    this.employeeId = this.route.snapshot.params.id;
+    if (this.employeeId !== 0) {
+      this.employeeService.getEmployeeById(this.employeeId).subscribe((data: EmployeeDto) => {
+        this.employeeForm.patchValue(data);
+      });
+    }
   }
 
   get addressGroup(): any {
@@ -44,7 +53,7 @@ export class EmployeeFormComponent implements OnInit {
   private buildAddressForm(): FormGroup {
     return this.formBuilder.group({
       street: ['', Validators.required],
-      zipCode: ['', Validators.required],
+      zip: ['', Validators.required],
       country: [''],
       city: ['', Validators.required]
     });

@@ -8,6 +8,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { CsvModule } from '@ctrl/ngx-csv';
 
 @NgModule({
   imports: [
@@ -17,6 +19,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ReactiveFormsModule,
     NgSelectModule,
     FormsModule,
+    CsvModule,
+    NgxDatatableModule,
     NgbModule
   ],
   declarations: [EmployeesListComponent, EmployeeFormComponent]
