@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateAdapter, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
+import { EmployeesService } from '@app/employees/employees.service';
+import {Position} from '@app/employees/models/position';
 
 @Component({
   selector: 'app-employee-form',
@@ -10,9 +12,12 @@ import { NgbDateAdapter, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap
 })
 export class EmployeeFormComponent implements OnInit {
   employeeForm: FormGroup;
-  positions: any;
+  positions: Position[];
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    public employeeService: EmployeesService
+  ) {}
 
   ngOnInit() {
     this.employeeForm = this.formBuilder.group({
@@ -24,13 +29,8 @@ export class EmployeeFormComponent implements OnInit {
       address: this.buildAddressForm(),
       salary: this.buildSalaryForm()
     });
+    this.employeeService.getPositionsDictionary().subscribe(x => this.positions = x);
 
-    this.positions = [
-      {
-        id: 1,
-        name: 'CEO'
-      }
-    ];
   }
 
   get addressGroup(): any {
