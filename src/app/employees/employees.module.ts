@@ -10,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { CsvModule } from '@ctrl/ngx-csv';
+import { MonthDatePickerComponent } from './month-date-picker/month-date-picker.component';
+import { EmployeeResolver } from '@app/employees/resolvers/employee.resolver';
 
 @NgModule({
   imports: [
@@ -23,6 +25,7 @@ import { CsvModule } from '@ctrl/ngx-csv';
     NgxDatatableModule,
     NgbModule
   ],
-  declarations: [EmployeesListComponent, EmployeeFormComponent]
+  declarations: [EmployeesListComponent, EmployeeFormComponent, MonthDatePickerComponent],
+  providers: [EmployeeResolver]
 })
 export class EmployeesModule {}

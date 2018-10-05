@@ -28,4 +28,8 @@ export class EmployeesService {
   deleteEmployee(id: number): Observable<any> {
     return this.httpClient.delete('/employees/' + id);
   }
+
+  addNewEmployee(employee: EmployeeDto): Observable<number> {
+    return this.httpClient.post<number>('/employees', employee);
+  }
 }

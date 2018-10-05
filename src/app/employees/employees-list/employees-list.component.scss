@@ -3,3 +3,20 @@
 :host /deep/ .datatable-body-row.active .datatable-row-group {
   background-color: $gray-500 !important; /* stylelint-disable-line declaration-no-important */
 }
+
+.form-control-borderless {
+  border: none;
+}
+
+.form-control-borderless:hover,
+.form-control-borderless:active,
+.form-control-borderless:focus {
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+:host /deep/ .dropdown-menu {
+  max-height: 300px;
+  overflow-y: auto;
+}

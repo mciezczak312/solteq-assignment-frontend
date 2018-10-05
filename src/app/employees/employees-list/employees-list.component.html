@@ -1,26 +1,45 @@
 <div class="container">
-  <div class="form-group">
-    <label for="typeahead-http">Search for a employee</label>
-    <input id="typeahead-http"
-           type="text"
-           (selectItem)="itemSelected($event)"
-           class="form-control"
-           [class.is-invalid]="searchFailed"
-           [(ngModel)]="model"
-           [ngbTypeahead]="search"
-           placeholder="Search by first name / last name / email" />
+  <div class="row justify-content-center mb-2">
+    <div class="col-12">
+      <div class="card card-sm">
+        <div class="card-body row no-gutters align-items-center">
+          <div class="col-auto">
+            <i class="fas fa-search h5 text-body"></i>
+          </div>
+          <div class="col">
+            <input id="typeahead"
+                   (keyup.enter)="onSearch($event)"
+                   type="text"
+                   (selectItem)="itemSelected($event)"
+                   class="form-control form-control-borderless"
+                   [class.is-invalid]="searchFailed"
+                   [(ngModel)]="searchInputModel"
+                   [ngbTypeahead]="search"
+                   placeholder="Search by first name / last name / email"/>
+          </div>
+          <div class="col-auto">
+            <button class="btn btn-success" type="button" (click)="onSearch($event)">Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
 
   <div class="row mr-0 justify-content-end mb-2">
     <button type="button" (click)="onEdit()" [disabled]="selectedRow.length === 0" class="btn btn-primary">Edit</button>
-    <button type="button" (click)="onDelete()" [disabled]="selectedRow.length === 0" class="btn btn-danger ml-2">Delete</button>
-    <a *ngIf="rows" csvLink [data]="rows"><button type="button" class="btn btn-dark ml-2">Export to CSV</button></a>
+    <button type="button" (click)="onDelete()" [disabled]="selectedRow.length === 0" class="btn btn-danger ml-2">
+      Delete
+    </button>
+    <a *ngIf="rows" csvLink [data]="rows">
+      <button type="button" class="btn btn-dark ml-2">Export to CSV</button>
+    </a>
   </div>
 
   <ngx-datatable
     class="material"
     [rows]="rows"
-    [columns]="[{name:'First name'},{name:'Last name'},{name:'Email'},{name:'Current Salary'},{name:'Positions names'}]"
+    [columns]="columnsModel"
     [columnMode]="'force'"
     [headerHeight]="50"
     [footerHeight]="50"
@@ -33,8 +52,10 @@
     [count]="page?.totalElements"
     [offset]="page?.pageNumber"
     [limit]="page?.pageSize"
-    [sorts]="[{prop: 'firstName', dir: 'asc'}]"
-    (page)="setPage($event)">
+    [sorts]="defaultSort"
+    (page)="setPage($event)"
+    (sort)="onSort($event)"
+    [externalSorting]="true">
   </ngx-datatable>
 
 </div>

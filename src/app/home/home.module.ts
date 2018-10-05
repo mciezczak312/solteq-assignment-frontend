@@ -7,13 +7,13 @@ import { SharedModule } from '@app/shared';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';
-import { QuoteService } from './quote.service';
 import { DashboardBlockComponent } from './dashboard-block/dashboard-block.component';
 import { StatisticsService } from '@app/home/statistics.service';
+import { AverageSalaryGraphComponent } from './average-salary-graph/average-salary-graph.component';
 
 @NgModule({
   imports: [CommonModule, TranslateModule, CoreModule, SharedModule, HomeRoutingModule, NgxChartsModule],
-  declarations: [HomeComponent, DashboardBlockComponent],
-  providers: [QuoteService, StatisticsService]
+  declarations: [HomeComponent, DashboardBlockComponent, AverageSalaryGraphComponent],
+  providers: [StatisticsService]
 })
 export class HomeModule {}

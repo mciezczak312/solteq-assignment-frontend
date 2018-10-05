@@ -1,5 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import {
+  Router,
+  NavigationEnd,
+  ActivatedRoute,
+  NavigationCancel,
+  NavigationStart,
+  NavigationError
+} from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { merge } from 'rxjs';
@@ -16,13 +23,33 @@ const log = new Logger('App');
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  loading = false;
+
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private titleService: Title,
     private translateService: TranslateService,
     private i18nService: I18nService
-  ) {}
+  ) {
+    this.router.events.subscribe((routerEvent: any) => {
+      this.checkRouterEvent(routerEvent);
+    });
+  }
+
+  checkRouterEvent(routerEvent: Event): void {
+    if (routerEvent instanceof NavigationStart) {
+      this.loading = true;
+    }
+
+    if (
+      routerEvent instanceof NavigationEnd ||
+      routerEvent instanceof NavigationCancel ||
+      routerEvent instanceof NavigationError
+    ) {
+      this.loading = false;
+    }
+  }
 
   ngOnInit() {
     // Setup logger

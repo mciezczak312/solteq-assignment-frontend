@@ -21,7 +21,8 @@ describe('EmployeesListComponent', () => {
         NgxDatatableModule,
         NgbTypeaheadModule,
         HttpClientTestingModule,
-        RouterModule],
+        RouterModule
+      ],
       declarations: [EmployeesListComponent],
       providers: []
     }).compileComponents();
@@ -32,5 +33,4 @@ describe('EmployeesListComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
 });

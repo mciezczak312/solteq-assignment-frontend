@@ -1,6 +1,10 @@
 @import "src/theme/theme-variables";
 @import "~bootstrap/scss/mixins/_breakpoints";
 
+.btn-wide {
+  width: 150px;
+}
+
 .form-container {
   width: 85%;
   margin: auto;
@@ -13,6 +17,10 @@
 .no-padding-lr {
   padding-left: 0;
   padding-right: 0;
+}
+
+.month-date-picker {
+  width: 100%;
 }
 
 @include media-breakpoint-down(xs) {

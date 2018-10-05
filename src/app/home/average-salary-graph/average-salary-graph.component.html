@@ -1,0 +1,26 @@
+<div class="card col-md-12 pl-0 pr-0">
+  <div class="card-header">
+
+    <div class="btn-group btn-group-toggle m-1" data-toggle="buttons" *ngFor="let x of availableYears">
+      <label class="btn btn-secondary" [ngClass]="{'active': currentGraphYear === x}">
+        <input type="radio" (click)="onChangeGraph(x)" name="options" id="option2" autocomplete="off" checked /> {{x}}
+      </label>
+    </div>
+  </div>
+
+  <div class="card-body" *ngIf="statsDataGraphFormatted">
+    <ngx-charts-line-chart
+      [scheme]="colorScheme"
+      [results]="statsDataGraphFormatted"
+      [gradient]="gradient"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="showLegend"
+      [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      autoScale="true">
+    </ngx-charts-line-chart>
+  </div>
+</div>

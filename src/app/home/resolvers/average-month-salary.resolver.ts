@@ -5,7 +5,7 @@ import { StatisticsService } from '@app/home/statistics.service';
 import { AverageMonthsSalaryStatistics } from '@app/home/models/statistics-models';
 
 @Injectable()
-export class StatsResolver implements Resolve<AverageMonthsSalaryStatistics> {
+export class AverageMonthSalaryResolver implements Resolve<AverageMonthsSalaryStatistics> {
   constructor(private backend: StatisticsService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {

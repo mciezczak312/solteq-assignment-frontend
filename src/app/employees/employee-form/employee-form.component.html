@@ -7,6 +7,8 @@
       </h4>
 
 
+
+
       <form [formGroup]="employeeForm" novalidate>
         <h5>Personal details</h5>
         <hr/>
@@ -137,54 +139,49 @@
                      [placeholder]="'Salary' | translate"/>
 
               <small [hidden]="salaryGroup.controls.amount.valid || salaryGroup.controls.amount.untouched"
-                     class="col-md-9 offset-md-3 text-danger" translate>
+                     class="col-md-9 offset-md-3 text-danger">
                 <span [hidden]="!salaryGroup.controls.amount.errors?.required" translate>Salary is required</span>
                 <span [hidden]="!salaryGroup.controls.amount.errors?.min" translate>Salary has to be greater than 0</span>
 
               </small>
-
-
             </div>
 
             <div class="form-group row">
-              <label for="amount" class="col-md-3 col-form-label no-padding-lr">
+              <label for="dp" class="col-md-3 col-form-label no-padding-lr">
                 <span translate>Starting date</span>
               </label>
-
               <div class="input-group col-md-9 no-padding-lr">
-                <input class="form-control"
-                       placeholder="yyyy-mm-dd"
-                       name="dp" formControlName="fromDate" ngbDatepicker #d="ngbDatepicker"/>
-                <div class="input-group-append">
-                  <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
-                    <i class="fas fa-calendar-alt"></i>
-                  </button>
-                </div>
+                <app-month-date-picker class="month-date-picker" id="dp" name="fromDate" formControlName="fromDate"></app-month-date-picker>
               </div>
             </div>
 
             <div class="form-group row">
-              <label for="amount" class="col-md-3 col-form-label no-padding-lr">
+              <label for="dp2" class="col-md-3 col-form-label no-padding-lr">
                 <span translate>Ending date</span>
               </label>
-
               <div class="input-group col-md-9 no-padding-lr">
-                <input class="form-control"
-                       placeholder="yyyy-mm-dd"
-                       name="dp2" formControlName="toDate" ngbDatepicker #dp2="ngbDatepicker"/>
-                <div class="input-group-append">
-                  <button class="btn btn-outline-secondary" (click)="dp2.toggle()" type="button">
-                    <i class="fas fa-calendar-alt"></i>
-                  </button>
-                </div>
+                <app-month-date-picker class="month-date-picker" id="dp2" name="toDate" formControlName="toDate"></app-month-date-picker>
               </div>
+              <small class="col-md-9 offset-md-3 text-danger" [hidden]="!salaryGroup.errors?.wrongDate" translate>
+                Ending date has to be greater than starting date
+              </small>
             </div>
+
+
+
           </div>
 
         </div>
 
       </form>
 
+      <div class="d-flex">
+        <button class="btn btn-lg btn-primary btn-wide ml-auto mr-auto"
+                (click)="onSave()"
+                [disabled]="!employeeForm.valid || employeeForm.pristine" translate>
+          Save
+        </button>
+      </div>
 
     </div>
   </div>

@@ -4,7 +4,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { extract } from '@app/core';
 import { HomeComponent } from './home.component';
 import { Shell } from '@app/shell/shell.service';
-import { StatsResolver } from './resolvers/stats.resolver';
+import { AverageMonthSalaryResolver } from './resolvers/average-month-salary.resolver';
+import { EmployeesStatsResolver } from '@app/home/resolvers/employees-stats.resolver';
 
 const routes: Routes = [
   Shell.childRoutes([
@@ -14,7 +15,8 @@ const routes: Routes = [
       component: HomeComponent,
       data: { title: extract('Home') },
       resolve: {
-        stats: StatsResolver
+        avgMonthSalary: AverageMonthSalaryResolver,
+        employeesStats: EmployeesStatsResolver
       }
     }
   ])
@@ -23,6 +25,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers: [StatsResolver]
+  providers: [AverageMonthSalaryResolver, EmployeesStatsResolver]
 })
 export class HomeRoutingModule {}

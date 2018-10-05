@@ -1,10 +1,10 @@
-export interface EmployeeDto {
+export class EmployeeDto {
   id: number;
   firstName: string;
   lastName: string;
   email: string;
   gender: string;
-  positionsNames: string[];
+  positionsNamesIds: number[];
   address: Address;
   salary: Salary;
 }

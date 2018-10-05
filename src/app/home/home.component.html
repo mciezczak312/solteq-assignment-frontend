@@ -4,43 +4,18 @@
       Employee Management System Dashboard
     </h1>
   </div>
-  <div class="full-width text-center">
-    <app-loader [isLoading]="isLoading"></app-loader>
-  </div>
   <div class="row ml-0">
-    <div class="card col-md-9 no-padding-lr">
-      <div class="card-header">
-
-        <div class="btn-group btn-group-toggle" data-toggle="buttons" *ngFor="let x of availableYears">
-          <label class="btn btn-secondary" [ngClass]="{'active': currentGraphYear === x}">
-            <input type="radio" (click)="onChangeGraph(x)" name="options" id="option2" autocomplete="off" checked /> {{x}}
-          </label>
-        </div>
-      </div>
-
-      <div class="card-body">
-        <ngx-charts-line-chart
-          [scheme]="colorScheme"
-          [results]="statsDataGraphFormatted"
-          [gradient]="gradient"
-          [xAxis]="showXAxis"
-          [yAxis]="showYAxis"
-          [legend]="showLegend"
-          [showXAxisLabel]="showXAxisLabel"
-          [showYAxisLabel]="showYAxisLabel"
-          [xAxisLabel]="xAxisLabel"
-          [yAxisLabel]="yAxisLabel"
-          autoScale="true">
-        </ngx-charts-line-chart>
-      </div>
+    <div class="col-md-9">
+      <app-average-salary-graph
+        [statsDataGraphRaw] = "rawGraphData">
+      </app-average-salary-graph>
     </div>
-
 
     <div *ngIf="employeesStats" class="col-md-3 col-12">
       <div class="ml-2">
         <app-dashboard-block
           [iconName]="'fa-dollar-sign'"
-          [mainText]="employeesStats?.averageCurrentSalary"
+          [mainText]="employeesStats?.averageCurrentSalary | currency: 'EUR'"
           [secondaryText]="'Average salary'">
         </app-dashboard-block>
       </div>
