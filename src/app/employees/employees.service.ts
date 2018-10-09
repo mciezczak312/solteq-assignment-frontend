@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Position } from './models/position';
+import { Position } from './models/position.model';
 import { publishLast, refCount } from 'rxjs/operators';
 import { EmployeeDto } from '@app/employees/models/employee-dto.model';
 
@@ -31,5 +31,9 @@ export class EmployeesService {
 
   addNewEmployee(employee: EmployeeDto): Observable<number> {
     return this.httpClient.post<number>('/employees', employee);
+  }
+
+  updateEmployee(employee: EmployeeDto): Observable<any> {
+    return this.httpClient.put(`/employees/${employee.id}`, employee);
   }
 }

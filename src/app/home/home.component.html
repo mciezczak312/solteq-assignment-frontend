@@ -16,14 +16,14 @@
         <app-dashboard-block
           [iconName]="'fa-dollar-sign'"
           [mainText]="employeesStats?.averageCurrentSalary | currency: 'EUR'"
-          [secondaryText]="'Average salary'">
+          [secondaryText]="'Average salary' | translate">
         </app-dashboard-block>
       </div>
       <div class="ml-2 mt-2">
         <app-dashboard-block
           [iconName]="'fa-users'"
           [mainText]="employeesStats?.employeesCount"
-          [secondaryText]="'No. of employees'">
+          [secondaryText]="'No. of employees' | translate">
         </app-dashboard-block>
       </div>
     </div>

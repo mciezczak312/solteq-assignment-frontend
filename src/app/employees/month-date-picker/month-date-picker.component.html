@@ -7,11 +7,12 @@
       name="date"
       [(ngModel)]="dateTxt"
       [placeholder]="mask"
+      [disabled]="disabled"
       #item
       (input)="change(item.value)"/>
     <div class="input-group-append">
 
-      <button class="btn btn-outline-secondary dropdown-toggle-split" ngbDropdownToggle>
+      <button [disabled]="disabled" class="btn btn-outline-secondary dropdown-toggle-split" ngbDropdownToggle>
         <i class="fas fa-calendar-alt"></i>
       </button>
     </div>

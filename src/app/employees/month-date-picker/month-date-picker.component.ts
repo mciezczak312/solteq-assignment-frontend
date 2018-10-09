@@ -84,7 +84,7 @@ export class MonthDatePickerComponent implements ControlValueAccessor {
         year: iyear,
         month: imonth
       };
-      this.incr = MonthDatePickerComponent.getIncr(this.date.year);
+      this.incr = this.getIncr(this.date.year);
     }
     this.writeValue(this.date);
   }
@@ -95,7 +95,7 @@ export class MonthDatePickerComponent implements ControlValueAccessor {
       this.date.year = index + this.incr;
       this.dateTxt = this.formatData(this.date);
       this.isyear = false;
-      this.incr = MonthDatePickerComponent.getIncr(this.date.year);
+      this.incr = this.getIncr(this.date.year);
       this.onChange(this.date);
     } else {
       this.date.month = index + 1;
@@ -113,7 +113,7 @@ export class MonthDatePickerComponent implements ControlValueAccessor {
     $event.stopPropagation();
     const year = this.isyear ? this.date.year + 10 * incr : this.date.year + incr;
     this.date.year = year;
-    this.incr = MonthDatePickerComponent.getIncr(year);
+    this.incr = this.getIncr(year);
     this.dateTxt = this.formatData(this.date);
   }
 
@@ -122,10 +122,10 @@ export class MonthDatePickerComponent implements ControlValueAccessor {
     this.dateTxt = this.monthFirst
       ? '' + date.month + this.separator + date.year
       : '' + date.year + this.separator + date.month;
-    this.incr = MonthDatePickerComponent.getIncr(this.date.year);
+    this.incr = this.getIncr(this.date.year);
   };
 
-  static getIncr(year: number): number {
+  getIncr(year: number): number {
     return year - (year % 10) - 1;
   }
 

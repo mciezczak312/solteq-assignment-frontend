@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NgbDateAdapter, NgbDateNativeAdapter } from '@ng-bootstrap/ng-bootstrap';
 import { EmployeesService } from '@app/employees/employees.service';
-import { Position } from '@app/employees/models/position';
+import { Position } from '@app/employees/models/position.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeeDto } from '@app/employees/models/employee-dto.model';
 import { ToastrService } from 'ngx-toastr';
 import { extract, HttpCacheService } from '@app/core';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-employee-form',
@@ -21,6 +22,8 @@ export class EmployeeFormComponent implements OnInit {
 
   employeeId: number;
   employeeDto: EmployeeDto;
+  employeeMinSalaryDate: any;
+  newSalaryAdded = false;
 
   currentYear = new Date().getFullYear();
   currentMonth = new Date().getMonth();
@@ -41,7 +44,7 @@ export class EmployeeFormComponent implements OnInit {
         this.employeeId = 0;
         if (this.employeeForm) {
           this.employeeForm.reset(this.employeeFromBaseState, { emitEvent: false });
-          this.salaryGroup.patchValue({
+          this.salaryGroup[0].patchValue({
             toDate: { year: this.currentYear, month: this.currentMonth + 1 },
             fromDate: { year: this.currentYear, month: this.currentMonth + 1 }
           });
@@ -58,19 +61,23 @@ export class EmployeeFormComponent implements OnInit {
       gender: '',
       positionsNamesIds: [[]],
       address: this.buildAddressForm(),
-      salary: this.buildSalaryForm()
+      salary: this.formBuilder.array([this.buildSalaryForm()])
     });
     this.employeeFromBaseState = this.employeeForm.value;
     this.employeeService.getPositionsDictionary().subscribe(x => (this.positions = x));
 
     if (this.employeeDto) {
-      this.employeeForm.patchValue(this.employeeDto);
-      const dateFrom = new Date(this.employeeDto.salary.fromDate);
-      const dateTo = new Date(this.employeeDto.salary.toDate);
-      this.salaryGroup.patchValue({
-        toDate: { year: dateTo.getFullYear(), month: dateTo.getMonth() + 1 },
-        fromDate: { year: dateFrom.getFullYear(), month: dateFrom.getMonth() + 1 }
+      const mappedDto = Object.assign({}, this.employeeDto, { salary: [] });
+      mappedDto.salary.push(this.employeeDto.salary);
+      this.employeeForm.patchValue(mappedDto);
+      const toDate = new Date(this.employeeDto.salary.toDate);
+      const fromDate = new Date(this.employeeDto.salary.fromDate);
+      this.employeeMinSalaryDate = toDate;
+      this.salaryGroup.controls[0].patchValue({
+        fromDate: { year: fromDate.getFullYear(), month: fromDate.getMonth() + 1 },
+        toDate: { year: toDate.getFullYear(), month: toDate.getMonth() + 1 }
       });
+      this.salaryGroup.controls[0].disable();
     }
   }
 
@@ -82,23 +89,42 @@ export class EmployeeFormComponent implements OnInit {
     return this.employeeForm.controls.salary;
   }
 
-
+  onAddSalary() {
+    this.salaryGroup.push(this.buildSalaryForm());
+    this.salaryGroup.controls[1].controls.fromDate.setValidators([MinStartDateValidator(this.employeeMinSalaryDate)])
+    this.newSalaryAdded = true;
+  }
 
   onSave() {
-    const newEmployee: EmployeeDto = this.employeeForm.value;
-    const dateFrom = this.salaryGroup.controls.fromDate.value;
-    const dateTo = this.salaryGroup.controls.toDate.value;
-    newEmployee.salary.toDate = `${dateTo.year}-${dateTo.month}-01`;
-    newEmployee.salary.fromDate = `${dateFrom.year}-${dateFrom.month}-01`;
+    const newEmployee: EmployeeDto = Object.assign({}, this.employeeForm.value, { salary: {} });
+
     if (this.employeeId === 0) {
+      const dateFrom = this.salaryGroup.controls[0].controls.fromDate.value;
+      const dateTo = this.salaryGroup.controls[0].controls.toDate.value;
+      newEmployee.salary.amount = this.salaryGroup.controls[0].controls.amount.value;
+      newEmployee.salary.toDate = `${dateTo.year}-${dateTo.month}-01`;
+      newEmployee.salary.fromDate = `${dateFrom.year}-${dateFrom.month}-01`;
+
       this.employeeService.addNewEmployee(newEmployee).subscribe(id => {
         this.toastr.success(extract('New employee added'));
         this.cacheService.cleanCache();
         this.router.navigateByUrl('/employees');
       });
     } else {
-      // UPDATE
-      console.log('update');
+      newEmployee.id = this.employeeId;
+      newEmployee.address.id = this.employeeDto.address.id;
+      if (this.newSalaryAdded) {
+        const dateFrom = this.salaryGroup.controls[1].controls.fromDate.value;
+        const dateTo = this.salaryGroup.controls[1].controls.toDate.value;
+        newEmployee.salary.amount = this.salaryGroup.controls[1].controls.amount.value;
+        newEmployee.salary.toDate = `${dateTo.year}-${dateTo.month}-01`;
+        newEmployee.salary.fromDate = `${dateFrom.year}-${dateFrom.month}-01`;
+      }
+      this.employeeService.updateEmployee(newEmployee).subscribe(() => {
+        this.toastr.success(extract('Employee updated'));
+        this.cacheService.cleanCache();
+        this.router.navigateByUrl('/employees');
+      });
     }
   }
 
@@ -123,16 +149,31 @@ export class EmployeeFormComponent implements OnInit {
   }
 }
 
-function FromToDateValidator(group: FormGroup): any {
+function FromToDateValidator(group: FormGroup): { [key: string]: boolean } | null {
   if (group) {
     const fromDateValue = group.controls.fromDate.value;
     const toDateValue = group.controls.toDate.value;
     const fromDate = new Date(fromDateValue.year, fromDateValue.month, 1);
     const toDate = new Date(toDateValue.year, toDateValue.month);
-    if (toDate < fromDate) {
+    if (toDate <= fromDate) {
       return { wrongDate: true };
     }
   }
 
   return null;
+}
+
+function MinStartDateValidator(minSalaryDate: Date): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: boolean } | null => {
+    if (control) {
+      const fromDateValue = control.value;
+      const fromDate = new Date(fromDateValue.year, fromDateValue.month - 1, 1);
+
+      if (fromDate < minSalaryDate) {
+        return { wrongMinDate: true };
+      }
+    }
+
+    return null;
+  };
 }

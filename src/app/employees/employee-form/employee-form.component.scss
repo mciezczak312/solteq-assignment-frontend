@@ -19,6 +19,11 @@
   padding-right: 0;
 }
 
+:host /deep/ .ng-dropdown-panel {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .month-date-picker {
   width: 100%;
 }

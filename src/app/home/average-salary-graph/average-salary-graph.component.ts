@@ -9,7 +9,7 @@ import { AverageMonthsSalaryStatistics } from '@app/home/models/statistics-model
 })
 export class AverageSalaryGraphComponent implements OnInit {
   currentGraphYear: number;
-  availableYears: number[] = [2017, 2018];
+  availableYears: number[] = [2017, 2018, 2019];
 
   @Input()
   statsDataGraphRaw: AverageMonthsSalaryStatistics;

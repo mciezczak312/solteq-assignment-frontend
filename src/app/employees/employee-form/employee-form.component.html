@@ -6,11 +6,8 @@
         Employee form
       </h4>
 
-
-
-
       <form [formGroup]="employeeForm" novalidate>
-        <h5>Personal details</h5>
+        <h5 translate>Personal details</h5>
         <hr/>
         <div class="form-container">
           <div class="form-group row">
@@ -27,7 +24,8 @@
           </div>
 
           <div class="form-group row">
-            <label for="last-name" class="col-md-3 col-form-label no-padding-lr"><span translate>Last name</span></label>
+            <label for="last-name" class="col-md-3 col-form-label no-padding-lr"><span
+              translate>Last name</span></label>
 
             <input id="last-name" type="text" class="col-md-9 form-control" formControlName="lastName"
                    [placeholder]="'Last name' | translate"/>
@@ -76,9 +74,8 @@
           </div>
         </div>
 
-        <h5>Address details</h5>
+        <h5 translate>Address details</h5>
         <hr/>
-
 
         <div class="form-container">
           <div [formGroup]="addressGroup">
@@ -126,53 +123,72 @@
           </div>
         </div>
 
-        <h5>Salary details</h5>
+        <h5 translate>Latest salary details</h5>
         <hr/>
 
-        <div class="form-container">
-          <div [formGroup]="salaryGroup">
-            <div class="form-group row">
-              <label for="amount" class="col-md-3 col-form-label no-padding-lr"><span
-                translate>Salary amount</span></label>
+        <div formArrayName="salary"
+             *ngFor="let item of salaryGroup.controls; let i = index;">
+          <div [formGroupName]="i">
 
-              <input id="amount" type="number" class="col-md-9 form-control" formControlName="amount"
-                     [placeholder]="'Salary' | translate"/>
-
-              <small [hidden]="salaryGroup.controls.amount.valid || salaryGroup.controls.amount.untouched"
-                     class="col-md-9 offset-md-3 text-danger">
-                <span [hidden]="!salaryGroup.controls.amount.errors?.required" translate>Salary is required</span>
-                <span [hidden]="!salaryGroup.controls.amount.errors?.min" translate>Salary has to be greater than 0</span>
-
-              </small>
+            <div *ngIf="i > 0">
+              <h5 translate>New salary details</h5>
+              <hr/>
             </div>
 
-            <div class="form-group row">
-              <label for="dp" class="col-md-3 col-form-label no-padding-lr">
-                <span translate>Starting date</span>
-              </label>
-              <div class="input-group col-md-9 no-padding-lr">
-                <app-month-date-picker class="month-date-picker" id="dp" name="fromDate" formControlName="fromDate"></app-month-date-picker>
+            <div class="form-container">
+              <div>
+                <div class="form-group row">
+                  <label for="amount" class="col-md-3 col-form-label no-padding-lr"><span
+                    translate>Salary amount</span></label>
+
+                  <input id="amount" type="number" class="col-md-9 form-control" formControlName="amount"
+                         [placeholder]="'Salary' | translate"/>
+
+                  <small [hidden]="salaryGroup.controls[i].controls.amount.valid || salaryGroup.controls[i].controls.amount.untouched"
+                         class="col-md-9 offset-md-3 text-danger">
+                    <span [hidden]="!salaryGroup.controls[i].controls.amount.errors?.required"
+                          translate>Salary is required</span>
+                    <span [hidden]="!salaryGroup.controls[i].controls.amount.errors?.min"
+                          translate>Salary has to be greater than 0</span>
+
+                  </small>
+                </div>
+
+                <div class="form-group row">
+                  <label for="dp" class="col-md-3 col-form-label no-padding-lr">
+                    <span translate>Starting date</span>
+                  </label>
+                  <div class="input-group col-md-9 no-padding-lr">
+                    <app-month-date-picker class="month-date-picker" id="dp" name="fromDate"
+                                           formControlName="fromDate"></app-month-date-picker>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="dp2" class="col-md-3 col-form-label no-padding-lr">
+                    <span translate>Ending date</span>
+                  </label>
+                  <div class="input-group col-md-9 no-padding-lr">
+                    <app-month-date-picker class="month-date-picker" id="dp2" name="toDate"
+                                           formControlName="toDate"></app-month-date-picker>
+                  </div>
+                  <small class="col-md-9 offset-md-3 text-danger" [hidden]="!salaryGroup.controls[i].errors?.wrongDate"
+                         translate>
+                    Ending date has to be greater than starting date
+                  </small>
+                  <small class="col-md-9 offset-md-3 text-danger"
+                         [hidden]="!salaryGroup.controls[i].controls.fromDate.errors?.wrongMinDate" translate>
+                    Starting date has to be greater than last salary end date
+                  </small>
+
+                </div>
               </div>
             </div>
-
-            <div class="form-group row">
-              <label for="dp2" class="col-md-3 col-form-label no-padding-lr">
-                <span translate>Ending date</span>
-              </label>
-              <div class="input-group col-md-9 no-padding-lr">
-                <app-month-date-picker class="month-date-picker" id="dp2" name="toDate" formControlName="toDate"></app-month-date-picker>
-              </div>
-              <small class="col-md-9 offset-md-3 text-danger" [hidden]="!salaryGroup.errors?.wrongDate" translate>
-                Ending date has to be greater than starting date
-              </small>
-            </div>
-
-
-
           </div>
-
         </div>
-
+        <button [hidden]="newSalaryAdded || employeeId === 0" (click)="onAddSalary()" class="btn btn-secondary">
+          Add new salary
+        </button>
       </form>
 
       <div class="d-flex">
@@ -182,7 +198,6 @@
           Save
         </button>
       </div>
-
     </div>
   </div>
 </div>

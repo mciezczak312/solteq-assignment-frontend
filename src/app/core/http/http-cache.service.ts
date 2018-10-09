@@ -35,7 +35,6 @@ export class HttpCacheService {
       lastUpdated: lastUpdated || new Date(),
       data: data
     };
-    log.debug(`Cache set for key: "${url}"`);
     this.saveCacheData();
   }
 

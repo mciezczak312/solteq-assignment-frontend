@@ -35,11 +35,11 @@ export class EmployeesListComponent implements OnInit {
   loading: boolean;
   selectedRow: EmployeeSearchResultModel[] = [];
   columnsModel = [
-    { name: 'First name' },
-    { name: 'Last name' },
-    { name: 'Email' },
-    { name: 'Current Salary' },
-    { name: 'Positions names' }
+    { name: extract('First name') },
+    { name: extract('Last name') },
+    { name: extract('Email') },
+    { name: extract('Current Salary') },
+    { name: extract('Positions names') }
   ];
   defaultSort = [{ prop: 'firstName', dir: 'asc' }];
 

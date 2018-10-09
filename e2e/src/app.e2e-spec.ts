@@ -13,9 +13,4 @@ describe('app', () => {
     expect(browser.getCurrentUrl()).toContain('/login');
     page.login();
   });
-
-  it('should display hello message', () => {
-    page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Hello world !');
-  });
 });

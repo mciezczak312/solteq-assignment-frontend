@@ -11,7 +11,8 @@ import { ToastrModule } from 'ngx-toastr';
       timeOut: 5000,
       preventDuplicates: true,
       progressBar: true
-    })],
+    })
+  ],
   declarations: [LoaderComponent],
   exports: [LoaderComponent]
 })

@@ -6,9 +6,9 @@ import { EmployeesStatistics } from '@app/home/models/statistics-models';
 
 @Injectable()
 export class EmployeesStatsResolver implements Resolve<EmployeesStatistics> {
-  constructor(private backend: StatisticsService) {}
+  constructor(private statisticsService: StatisticsService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
-    return this.backend.getEmployeesStatistics();
+    return this.statisticsService.getEmployeesStatistics();
   }
 }
