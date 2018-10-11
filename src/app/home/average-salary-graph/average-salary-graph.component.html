@@ -9,18 +9,20 @@
   </div>
 
   <div class="card-body" *ngIf="statsDataGraphFormatted">
-    <ngx-charts-line-chart
-      [scheme]="colorScheme"
-      [results]="statsDataGraphFormatted"
-      [gradient]="gradient"
-      [xAxis]="showXAxis"
-      [yAxis]="showYAxis"
-      [legend]="showLegend"
-      [showXAxisLabel]="showXAxisLabel"
-      [showYAxisLabel]="showYAxisLabel"
-      [xAxisLabel]="xAxisLabel"
-      [yAxisLabel]="yAxisLabel"
-      autoScale="true">
-    </ngx-charts-line-chart>
+    <div class="graph-container">
+      <ngx-charts-line-chart
+        [scheme]="colorScheme"
+        [results]="statsDataGraphFormatted"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        autoScale="true">
+      </ngx-charts-line-chart>
+    </div>
   </div>
 </div>

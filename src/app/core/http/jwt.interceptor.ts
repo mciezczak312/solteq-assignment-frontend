@@ -10,7 +10,7 @@ const log = new Logger('JwtInterceptor');
 const credentialsKey = 'ems-credentials-key';
 
 /**
- * Sets authorization header
+ * Sets authorization header based on token stored in local storage
  */
 
 @Injectable()

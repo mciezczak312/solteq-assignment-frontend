@@ -26,7 +26,6 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class EmployeesListComponent implements OnInit {
   searchInputModel: any;
-  searching = false;
   searchFailed = false;
   searchResults: any = [];
 
@@ -64,7 +63,6 @@ export class EmployeesListComponent implements OnInit {
       skipWhile(term => term.length < 2),
       distinctUntilChanged(),
       switchMap(term => {
-        this.searching = true;
         return this.searchService.searchEmployees(term).pipe(
           tap(() => (this.searchFailed = false)),
           map(result => {
@@ -76,8 +74,7 @@ export class EmployeesListComponent implements OnInit {
             return of([]);
           })
         );
-      }),
-      tap(() => (this.searching = false))
+      })
     );
 
   onEdit() {
@@ -134,7 +131,6 @@ export class EmployeesListComponent implements OnInit {
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((pagedData: SearchResultsResponse) => {
         this.page.totalElements = pagedData.totalCount;
-
         this.rows = pagedData.searchResults;
       });
   }

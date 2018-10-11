@@ -11,6 +11,12 @@ import { publishLast, refCount } from 'rxjs/operators';
 export class SearchEmployeesService {
   constructor(private httpClient: HttpClient) {}
 
+  /**
+   * Gets paged data from server.
+   * @param pageModel Page model object
+   * @param searchTerm Optional string to search
+   */
+
   getPagedEmployeesData(pageModel: PageModel, searchTerm?: string): Observable<SearchResultsResponse> {
     const pageNumber = !!pageModel.pageNumber ? pageModel.pageNumber : 0;
     let searchParams = new HttpParams()
@@ -25,6 +31,12 @@ export class SearchEmployeesService {
 
     return this.httpClient.cache().get<SearchResultsResponse>('/employees/search', { params: searchParams });
   }
+
+  /**
+   * Executes search on employees tables
+   * @param searchTerm String to find
+   * @return {Observable<SearchResultsResponse>} The list of matched rows
+   */
 
   searchEmployees(searchTerm: string): Observable<SearchResultsResponse> {
     const searchParams = new HttpParams().set('q', searchTerm).set('take', '25');

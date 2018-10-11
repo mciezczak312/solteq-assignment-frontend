@@ -37,32 +37,21 @@ export class EmployeeFormComponent implements OnInit {
     private router: Router
   ) {
     this.route.data.subscribe(data => {
+      this.buildEmployeeForm();
       if (data.employee) {
         this.employeeDto = <EmployeeDto>data.employee;
         this.employeeId = this.employeeDto.id;
       } else {
         this.employeeId = 0;
-        if (this.employeeForm) {
-          this.employeeForm.reset(this.employeeFromBaseState, { emitEvent: false });
-          this.salaryGroup[0].patchValue({
-            toDate: { year: this.currentYear, month: this.currentMonth + 1 },
-            fromDate: { year: this.currentYear, month: this.currentMonth + 1 }
-          });
-        }
+        this.salaryGroup[0].patchValue({
+          toDate: { year: this.currentYear, month: this.currentMonth + 1 },
+          fromDate: { year: this.currentYear, month: this.currentMonth + 1 }
+        });
       }
     });
   }
 
   ngOnInit() {
-    this.employeeForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      gender: '',
-      positionsNamesIds: [[]],
-      address: this.buildAddressForm(),
-      salary: this.formBuilder.array([this.buildSalaryForm()])
-    });
     this.employeeFromBaseState = this.employeeForm.value;
     this.employeeService.getPositionsDictionary().subscribe(x => (this.positions = x));
 
@@ -99,11 +88,8 @@ export class EmployeeFormComponent implements OnInit {
     const newEmployee: EmployeeDto = Object.assign({}, this.employeeForm.value, { salary: {} });
 
     if (this.employeeId === 0) {
-      const dateFrom = this.salaryGroup.controls[0].controls.fromDate.value;
-      const dateTo = this.salaryGroup.controls[0].controls.toDate.value;
-      newEmployee.salary.amount = this.salaryGroup.controls[0].controls.amount.value;
-      newEmployee.salary.toDate = `${dateTo.year}-${dateTo.month}-01`;
-      newEmployee.salary.fromDate = `${dateFrom.year}-${dateFrom.month}-01`;
+      // ADD NEW
+      this.mapSalaryToDto(newEmployee, this.salaryGroup.controls[0].controls);
 
       this.employeeService.addNewEmployee(newEmployee).subscribe(id => {
         this.toastr.success(extract('New employee added'));
@@ -111,14 +97,12 @@ export class EmployeeFormComponent implements OnInit {
         this.router.navigateByUrl('/employees');
       });
     } else {
+      // UPDATE EXISTING
       newEmployee.id = this.employeeId;
       newEmployee.address.id = this.employeeDto.address.id;
+
       if (this.newSalaryAdded) {
-        const dateFrom = this.salaryGroup.controls[1].controls.fromDate.value;
-        const dateTo = this.salaryGroup.controls[1].controls.toDate.value;
-        newEmployee.salary.amount = this.salaryGroup.controls[1].controls.amount.value;
-        newEmployee.salary.toDate = `${dateTo.year}-${dateTo.month}-01`;
-        newEmployee.salary.fromDate = `${dateFrom.year}-${dateFrom.month}-01`;
+        this.mapSalaryToDto(newEmployee, this.salaryGroup.controls[1].controls);
       }
       this.employeeService.updateEmployee(newEmployee).subscribe(() => {
         this.toastr.success(extract('Employee updated'));
@@ -126,6 +110,26 @@ export class EmployeeFormComponent implements OnInit {
         this.router.navigateByUrl('/employees');
       });
     }
+  }
+
+  private mapSalaryToDto(dto: EmployeeDto, salaryControls: any): any {
+    const dateFrom = salaryControls.fromDate.value;
+    const dateTo = salaryControls.toDate.value;
+    dto.salary.amount = salaryControls.amount.value;
+    dto.salary.toDate = `${dateTo.year}-${dateTo.month}-01`;
+    dto.salary.fromDate = `${dateFrom.year}-${dateFrom.month}-01`;
+  }
+
+  private buildEmployeeForm() {
+    this.employeeForm = this.formBuilder.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      gender: '',
+      positionsNamesIds: [[]],
+      address: this.buildAddressForm(),
+      salary: this.formBuilder.array([this.buildSalaryForm()])
+    });
   }
 
   private buildAddressForm(): FormGroup {
