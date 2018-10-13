@@ -52,7 +52,6 @@ describe('AuthenticationService', () => {
     it('should authenticate user', fakeAsync(
       inject([HttpClient, HttpTestingController], (http: HttpClient, backend: HttpTestingController) => {
         expect(authenticationService.isAuthenticated()).toBe(false);
-
         // Act
         const request = authenticationService.login({
           username: 'toto',
@@ -68,13 +67,6 @@ describe('AuthenticationService', () => {
           expect((<Credentials>authenticationService.credentials).token).toBeDefined();
           expect((<Credentials>authenticationService.credentials).token).not.toBeNull();
         });
-
-        backend
-          .match({
-            url: '/user/auth',
-            method: 'POST'
-          })[0]
-          .flush({ token: '123', username: 'toto' });
       })
     ));
 

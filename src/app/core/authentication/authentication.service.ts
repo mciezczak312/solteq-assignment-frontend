@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import * as jwt_decode from 'jwt-decode';
 
 export interface Credentials {
   username: string;
@@ -59,7 +60,15 @@ export class AuthenticationService {
    * @return {boolean} True if the user is authenticated.
    */
   isAuthenticated(): boolean {
-    return !!this.credentials;
+    if (!this.credentials || !this.credentials.token) {
+      return false;
+    }
+    const tokenExpirationDate = this.getTokenExpirationDate(this.credentials.token);
+    if (!tokenExpirationDate) {
+      return false;
+    }
+
+    return !!this.credentials && tokenExpirationDate > new Date();
   }
 
   /**
@@ -87,5 +96,17 @@ export class AuthenticationService {
       sessionStorage.removeItem(credentialsKey);
       localStorage.removeItem(credentialsKey);
     }
+  }
+
+  private getTokenExpirationDate(token: string): Date {
+    const decoded = jwt_decode(token) as any;
+
+    if (!decoded.exp) {
+      return null;
+    }
+
+    const date = new Date(0);
+    date.setUTCSeconds(decoded.exp);
+    return date;
   }
 }

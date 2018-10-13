@@ -9,7 +9,6 @@ import { AverageMonthsSalaryStatistics, EmployeesStatistics } from '@app/home/mo
 export class StatisticsService {
   constructor(private httpClient: HttpClient) {}
 
-
   /**
    * Returns list of average salary per month
    * @return {Observable<AverageMonthsSalaryStatistics>} Mapped observable of http response

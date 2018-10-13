@@ -12,6 +12,9 @@ import {
   JwtInterceptor
 } from '@app/core';
 import { HttpService } from '@app/core/http/http.service';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
+import { ToastrModule } from 'ngx-toastr';
 
 describe('SearchEmployeesService', () => {
   let httpCacheService: HttpCacheService;
@@ -20,13 +23,17 @@ describe('SearchEmployeesService', () => {
 
   beforeEach(() =>
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule, ToastrModule.forRoot()],
       providers: [
         ErrorHandlerInterceptor,
         CacheInterceptor,
         ApiPrefixInterceptor,
         JwtInterceptor,
         HttpCacheService,
+        {
+          provide: Router,
+          useClass: RouterTestingModule
+        },
         {
           provide: HttpClient,
           useClass: HttpService

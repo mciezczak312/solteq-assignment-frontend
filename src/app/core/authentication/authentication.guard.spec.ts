@@ -1,9 +1,10 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
-import { AuthenticationService } from './authentication.service';
-import { MockAuthenticationService } from './authentication.service.mock';
-import { AuthenticationGuard } from './authentication.guard';
+import { AuthenticationService } from '@app/core';
+import { MockAuthenticationService } from '@app/core';
+import { AuthenticationGuard } from '@app/core';
+import { ToastrModule } from 'ngx-toastr';
 
 describe('AuthenticationGuard', () => {
   let authenticationGuard: AuthenticationGuard;
@@ -15,6 +16,7 @@ describe('AuthenticationGuard', () => {
       navigate: jasmine.createSpy('navigate')
     };
     TestBed.configureTestingModule({
+      imports: [ToastrModule.forRoot()],
       providers: [
         AuthenticationGuard,
         { provide: AuthenticationService, useClass: MockAuthenticationService },

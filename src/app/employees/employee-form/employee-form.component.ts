@@ -80,7 +80,7 @@ export class EmployeeFormComponent implements OnInit {
 
   onAddSalary() {
     this.salaryGroup.push(this.buildSalaryForm());
-    this.salaryGroup.controls[1].controls.fromDate.setValidators([MinStartDateValidator(this.employeeMinSalaryDate)])
+    this.salaryGroup.controls[1].controls.fromDate.setValidators([MinStartDateValidator(this.employeeMinSalaryDate)]);
     this.newSalaryAdded = true;
   }
 

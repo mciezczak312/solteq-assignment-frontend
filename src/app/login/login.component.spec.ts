@@ -6,6 +6,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { CoreModule } from '@app/core';
 import { LoginComponent } from './login.component';
+import { ToastrModule } from 'ngx-toastr';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -13,7 +14,14 @@ describe('LoginComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [NgbModule.forRoot(), RouterTestingModule, TranslateModule.forRoot(), ReactiveFormsModule, CoreModule],
+      imports: [
+        NgbModule.forRoot(),
+        RouterTestingModule,
+        TranslateModule.forRoot(),
+        ReactiveFormsModule,
+        ToastrModule.forRoot(),
+        CoreModule
+      ],
       declarations: [LoginComponent]
     }).compileComponents();
   }));

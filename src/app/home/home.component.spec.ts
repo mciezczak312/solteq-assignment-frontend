@@ -76,43 +76,37 @@ describe('HomeComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(inject(
-    [I18nService, TranslateService],
-    (_translateService: TranslateService) => {
-      translateService = _translateService;
+  beforeEach(inject([I18nService, TranslateService], (_translateService: TranslateService) => {
+    translateService = _translateService;
 
-      // Create spies
-      onLangChangeSpy = jasmine.createSpy('onLangChangeSpy');
-      translateService.onLangChange.subscribe((event: LangChangeEvent) => {
-        onLangChangeSpy(event.lang);
-      });
-      spyOn(translateService, 'use').and.callThrough();
+    // Create spies
+    onLangChangeSpy = jasmine.createSpy('onLangChangeSpy');
+    translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+      onLangChangeSpy(event.lang);
+    });
+    spyOn(translateService, 'use').and.callThrough();
 
-      const store = {};
-      const mockLocalStorage = {
-        getItem: (key: string): string => {
-          return key in store ? store[key] : null;
-        },
-        setItem: (key: string, value: string) => {
-          store[key] = `${value}`;
-        },
-        removeItem: (key: string) => {
-          delete store[key];
-        }
-      };
+    const store = {};
+    const mockLocalStorage = {
+      getItem: (key: string): string => {
+        return key in store ? store[key] : null;
+      },
+      setItem: (key: string, value: string) => {
+        store[key] = `${value}`;
+      },
+      removeItem: (key: string) => {
+        delete store[key];
+      }
+    };
 
-      spyOn(localStorage, 'getItem').and.callFake(mockLocalStorage.getItem);
-      spyOn(localStorage, 'setItem').and.callFake(mockLocalStorage.setItem);
-      spyOn(localStorage, 'removeItem').and.callFake(mockLocalStorage.removeItem);
-    }
-  ));
+    spyOn(localStorage, 'getItem').and.callFake(mockLocalStorage.getItem);
+    spyOn(localStorage, 'setItem').and.callFake(mockLocalStorage.setItem);
+    spyOn(localStorage, 'removeItem').and.callFake(mockLocalStorage.removeItem);
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-
-
   });
-
 });
